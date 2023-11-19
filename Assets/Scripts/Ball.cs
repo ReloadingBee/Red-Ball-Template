@@ -4,6 +4,8 @@ public class Ball : MonoBehaviour
 {
     Rigidbody2D rb;
     public float jumpSpeed = 5;
+    public bool isGrounded;
+    public GameObject deathParticle;
 
     private void Start()
     {
@@ -14,9 +16,34 @@ public class Ball : MonoBehaviour
         var hor = Input.GetAxis("Horizontal");
         rb.AddForce(new Vector2(hor, 0));
 
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && isGrounded)
         {
             rb.velocity += Vector2.up * jumpSpeed;
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.tag == "Die")
+        {
+            Destroy(gameObject);
+            for (int i = 0; i < 15; i++)
+            {
+                Instantiate(deathParticle, transform.position + new Vector3(Random.Range(-0.25f, 0.25f), Random.Range(-0.25f, 0.25f), Random.Range(-0.25f, 0.25f)), transform.rotation);
+            }
+            
+            GameManager.instance.Lose();
+        }
+        isGrounded = true;
+    }
+
+    private void OnCollisionExit2D(Collision2D other)
+    {
+        isGrounded = false;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        GameManager.instance.Win();
     }
 }
