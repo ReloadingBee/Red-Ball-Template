@@ -24,17 +24,21 @@ public class Ball : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.tag == "Die")
+        if (other.gameObject.CompareTag("Die"))
         {
+            Die();
             Destroy(gameObject);
             for (int i = 0; i < 15; i++)
             {
                 Instantiate(deathParticle, transform.position + new Vector3(Random.Range(-0.25f, 0.25f), Random.Range(-0.25f, 0.25f), Random.Range(-0.25f, 0.25f)), transform.rotation);
             }
-            
-            GameManager.instance.Lose();
         }
         isGrounded = true;
+    }
+
+    private void Die()
+    {
+        GameManager.instance.Lose();
     }
 
     private void OnCollisionExit2D(Collision2D other)
