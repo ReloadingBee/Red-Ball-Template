@@ -2,19 +2,24 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
+    public float moveForce;
     Rigidbody2D rb;
     public float jumpSpeed = 5;
     public bool isGrounded;
     public GameObject deathParticle;
 
+    public GameObject gameManager;
+
+
     private void Start()
     {
+        Instantiate(gameManager);
         rb = GetComponent<Rigidbody2D>();
     }
     private void Update()
     {
         var hor = Input.GetAxis("Horizontal");
-        rb.AddForce(new Vector2(hor, 0));
+        rb.AddForce(new Vector2(hor, 0) * Time.deltaTime * moveForce);
 
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
@@ -48,6 +53,7 @@ public class Ball : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (other.gameObject.name != "Teleporter") return;
         GameManager.instance.Win();
     }
 }

@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour
     public static GameManager instance = null;
     private void Start()
     {
+        Application.targetFrameRate = 60;
+
         source = GetComponent<AudioSource>();
         if(instance == null) // there's no second gamemanager
         {
