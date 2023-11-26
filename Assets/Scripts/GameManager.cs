@@ -39,6 +39,9 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        var pos = Camera.main.transform.position;
+        pos.z = 0;
+        transition.transform.position = pos;
         transition.localScale = Vector3.MoveTowards(transition.localScale, transitionTargetScale, 50 * Time.deltaTime);
     }
 
